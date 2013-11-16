@@ -8,5 +8,5 @@ This version is based on Tydus's linux port of jhProtominer v0.1c and it also in
 USAGE
 =====
 
-make CFLAGS="-O3 -march=native"
+make CFLAGS="-O3 -march=native";
 ./jhProtominer --help
