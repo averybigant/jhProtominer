@@ -1,7 +1,16 @@
 #include "global.h"
 #include <time.h>
 
-char* minerVersionString = "jhProtominer for PTSPool.com";
+
+
+// miner version string (for pool statistic)
+#ifdef __WIN32__
+char* minerVersionString = _strdup("jhProtominer for PTSPool.com");
+#else
+char* minerVersionString = _strdup("jhProtominer for PTSPool-Linux by averybigant");
+#include <cstdarg>
+#include <iostream>
+#endif
 
 minerSettings_t minerSettings = {0};
 
@@ -32,9 +41,11 @@ void applog(const char *fmt, ...)
 	time_t rawtime;
 	struct tm timeinfo;
 	time(&rawtime);
-	localtime_s(&timeinfo, &rawtime);
+	//localtime_s(&timeinfo, &rawtime);
+	timeinfo = *localtime(&rawtime);
 	len = strlen(fmt) + 13;
-	sprintf_s(f, "[%02d:%02d:%02d] %s\n", timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec, fmt);
+	//sprintf_s(f, "[%02d:%02d:%02d] %s\n", timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec, fmt);
+	sprintf(f, "[%02d:%02d:%02d] %s\n", timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec, fmt);
 	vfprintf(stderr, f, ap);
 	va_end(ap);
 }
@@ -433,16 +444,18 @@ int main(int argc, char** argv)
 	commandlineInput.port = 28988;
 	commandlineInput.workername = "PpXRMhz5dDHtFYpbDTpiAMJaVarMUJURT6";
 	commandlineInput.workerpass = "x";
+
 	commandlineInput.ptsMemoryMode = PROTOSHARE_MEM_256;
 	SYSTEM_INFO sysinfo;
 	GetSystemInfo( &sysinfo );
 	commandlineInput.numThreads = sysinfo.dwNumberOfProcessors;
-	commandlineInput.numThreads = min(max(commandlineInput.numThreads, 1), 4);
+	commandlineInput.numThreads = std::min(std::max(commandlineInput.numThreads, 1), 4);
 	jhProtominer_parseCommandline(argc, argv);
 	minerSettings.protoshareMemoryMode = commandlineInput.ptsMemoryMode;
 	applog("Launching miner...");
 	uint32 mbTable[] = {1024,512,256,128,32,8};
-	applog("Using %d megabytes of memory per thread", mbTable[min(commandlineInput.ptsMemoryMode,(sizeof(mbTable)/sizeof(mbTable[0])))]);
+	size_t mmode = (size_t)commandlineInput.ptsMemoryMode;
+	applog("Using %d megabytes of memory per thread", mbTable[std::min(mmode,(sizeof(mbTable)/sizeof(mbTable[0])))]);
 	applog("Using %d threads", commandlineInput.numThreads);
 	// set priority to below normal
 	SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);

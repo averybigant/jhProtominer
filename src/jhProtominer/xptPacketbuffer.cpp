@@ -1,4 +1,6 @@
 #include"global.h"
+#include <iostream>
+
 
 /*
  * Initializes a new packet buffer
@@ -31,8 +33,8 @@ void xptPacketbuffer_free(xptPacketbuffer_t* pb)
 void xptPacketbuffer_changeSizeLimit(xptPacketbuffer_t* pb, uint32 sizeLimit)
 {
 	pb->bufferLimit = sizeLimit;
-	pb->bufferSize = min(pb->bufferSize, pb->bufferLimit);
-	pb->parserIndex = min(pb->parserIndex, pb->bufferLimit);
+	pb->bufferSize = std::min(pb->bufferSize, pb->bufferLimit);
+	pb->parserIndex = std::min(pb->parserIndex, pb->bufferLimit);
 	pb->buffer = (uint8*)realloc(pb->buffer, pb->bufferLimit);
 }
 
@@ -260,6 +262,8 @@ void xptPacketbuffer_writeString(xptPacketbuffer_t* pb, char* stringData, uint32
 	maxStringLength--; // -1 since we count in the '\0' at the end
 	// get size of the string + length prefix
 	uint32 stringLength = (uint32)strlen(stringData);
+	std::cout << "len:" << maxStringLength << " " << stringLength << std::endl;
+	std::cout << stringData << std::endl;
 	if( stringLength > maxStringLength )
 	{
 		applog("xptPacketbuffer_writeData(): String is longer than maxStringLength");
