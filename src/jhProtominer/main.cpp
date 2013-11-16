@@ -7,7 +7,7 @@
 #ifdef __WIN32__
 char* minerVersionString = _strdup("jhProtominer for PTSPool.com");
 #else
-char* minerVersionString = _strdup("jhProtominer for PTSPool-Linux by averybigant");
+char* minerVersionString = _strdup("jhProtominer for PTSPool.com-Linux ported by Tydius and averybigant");
 #include <cstdarg>
 #include <iostream>
 #endif
@@ -442,7 +442,7 @@ int main(int argc, char** argv)
 {
 	commandlineInput.host = "112.124.13.238";
 	commandlineInput.port = 28988;
-	commandlineInput.workername = "PpXRMhz5dDHtFYpbDTpiAMJaVarMUJURT6";
+	commandlineInput.workername = "PraCuGyJs9t9ULQTLSiTJ6k58UGZUyHtnJ.pubtest";
 	commandlineInput.workerpass = "x";
 
 	commandlineInput.ptsMemoryMode = PROTOSHARE_MEM_256;
