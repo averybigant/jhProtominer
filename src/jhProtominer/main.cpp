@@ -1,5 +1,6 @@
 #include "global.h"
 #include <time.h>
+#include <cstdlib>
 
 
 
@@ -50,7 +51,7 @@ void applog(const char *fmt, ...)
 	va_end(ap);
 }
 
-struct  
+static struct  
 {
 	CRITICAL_SECTION cs_work;
 	uint32	algorithm;
@@ -273,7 +274,7 @@ void jhProtominer_xptQueryWorkLoop()
 					// update work
 					jhProtominer_getWorkFromXPTConnection(xptClient);
 					if (totalCollisionCount) {
-						char *hex = "0123456789abcdef";
+						const char *hex = "0123456789abcdef";
 						char prevblk[65];
 						for (int i = 0; i < 32; i++) {
 							prevblk[i * 2] = hex[(unsigned int)xptClient->blockWorkInfo.prevBlockHash[31 - i] / 16];
@@ -440,10 +441,10 @@ void jhProtominer_parseCommandline(int argc, char **argv)
 
 int main(int argc, char** argv)
 {
-	commandlineInput.host = "112.124.13.238";
+	commandlineInput.host = (char*)"112.124.13.238";
 	commandlineInput.port = 28988;
-	commandlineInput.workername = "PgHzchvs1u9M9tbR34VkeqCcjxmxNFFRMk.pubtest";
-	commandlineInput.workerpass = "x";
+	commandlineInput.workername = (char*)"PgHzchvs1u9M9tbR34VkeqCcjxmxNFFRMk.pubtest";
+	commandlineInput.workerpass = (char*)"x";
 
 	commandlineInput.ptsMemoryMode = PROTOSHARE_MEM_256;
 	SYSTEM_INFO sysinfo;
@@ -459,7 +460,11 @@ int main(int argc, char** argv)
 	applog("Using %d megabytes of memory per thread", mbTable[std::min(mmode,(sizeof(mbTable)/sizeof(mbTable[0])))]);
 	applog("Using %d threads", commandlineInput.numThreads);
 	// set priority to below normal
-	SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
+	int retval = SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
+	if(retval==-1){
+		//retval should be positive since we want to set priority to below normal anyway
+		exit(1);
+	}
 	// init winsock
 	WSADATA wsa;
 	WSAStartup(MAKEWORD(2,2),&wsa);
