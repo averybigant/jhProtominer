@@ -262,8 +262,8 @@ void xptPacketbuffer_writeString(xptPacketbuffer_t* pb, char* stringData, uint32
 	maxStringLength--; // -1 since we count in the '\0' at the end
 	// get size of the string + length prefix
 	uint32 stringLength = (uint32)strlen(stringData);
-	std::cout << "len:" << maxStringLength << " " << stringLength << std::endl;
-	std::cout << stringData << std::endl;
+	//std::cout << "len:" << maxStringLength << " " << stringLength << std::endl;
+	//std::cout << stringData << std::endl;
 	if( stringLength > maxStringLength )
 	{
 		applog("xptPacketbuffer_writeData(): String is longer than maxStringLength");

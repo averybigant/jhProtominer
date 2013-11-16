@@ -7,7 +7,7 @@
 #ifdef __WIN32__
 char* minerVersionString = _strdup("jhProtominer for PTSPool.com");
 #else
-char* minerVersionString = _strdup("jhProtominer for PTSPool.com-Linux ported by Tydius and averybigant");
+char* minerVersionString = _strdup("jhProtominer for PTSPool.com-Linux ported by Tydus and averybigant");
 #include <cstdarg>
 #include <iostream>
 #endif
@@ -442,7 +442,7 @@ int main(int argc, char** argv)
 {
 	commandlineInput.host = "112.124.13.238";
 	commandlineInput.port = 28988;
-	commandlineInput.workername = "PraCuGyJs9t9ULQTLSiTJ6k58UGZUyHtnJ.pubtest";
+	commandlineInput.workername = "PgHzchvs1u9M9tbR34VkeqCcjxmxNFFRMk.pubtest";
 	commandlineInput.workerpass = "x";
 
 	commandlineInput.ptsMemoryMode = PROTOSHARE_MEM_256;
@@ -452,6 +452,7 @@ int main(int argc, char** argv)
 	commandlineInput.numThreads = std::min(std::max(commandlineInput.numThreads, 1), 4);
 	jhProtominer_parseCommandline(argc, argv);
 	minerSettings.protoshareMemoryMode = commandlineInput.ptsMemoryMode;
+	std::cout << "**" << minerVersionString << "**" << std::endl;
 	applog("Launching miner...");
 	uint32 mbTable[] = {1024,512,256,128,32,8};
 	size_t mmode = (size_t)commandlineInput.ptsMemoryMode;
